@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Угадай число</title>
+    <style>
+        body {font-family: Arial, sans-serif; max-width: 400px; margin: 40px auto; line-height: 1.5;}
+        input {width: 100%; padding: 6px; font-size: 1rem;}
+        button {margin-top: 10px; padding: 8px 16px; font-size: 1rem;}
+        .message {margin-top: 20px; font-weight: bold;}
+    </style>
+</head>
+<body>
+    <h1>Угадай число от 1 до 100</h1>
+    <p>Я загадал число. Попробуйте его отгадать!</p>
+
+    <input id="guess" type="number" min="1" max="100" placeholder="Введите число">
+    <button id="checkBtn">Проверить</button>
+
+    <div id="result" class="message"></div>
+
+    <script>
+        // Загадываем случайное число от 1 до 100
+        const secret = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+
+        const input = document.getElementById('guess');
+        const btn = document.getElementById('checkBtn');
+        const resultDiv = document.getElementById('result');
+
+        btn.addEventListener('click', function () {
+            const userGuess = Number(input.value);
+            attempts++;
+
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                resultDiv.textContent = 'Введите число от 1 до 100.';
+                return;
+            }
+
+            if (userGuess === secret) {
+                resultDiv.textContent = `Поздравляю! Вы угадали за ${attempts} попыток.`;
+                btn.disabled = true;
+                input.disabled = true;
+            } else if (userGuess < secret) {
+                resultDiv.textContent = `Загаданное число больше ${userGuess}.`;
+            } else {
+                resultDiv.textContent = `Загаданное число меньше ${userGuess}.`;
+            }
+
+            input.value = '';
+            input.focus();
+        });
+
+        // Позволяем играть по нажатию Enter
+        input.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') btn.click();
+        });
+    </script>
+</body>
+</html>
